@@ -1,12 +1,12 @@
 import { Request, Response } from 'express';
-import { loginUser, loginFind } from '../services/UserService'
+import { register, login } from '../services/UserService'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
-export const register = async (req: Request, res: Response) => {
+export const Register = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body
     const hashPassword = await bcrypt.hash(password, 10)
-    const user = await loginUser(email, hashPassword)
+    const user = await register(email, hashPassword)
     console.log(user)
     res.status(200).json(user)
   } catch (error: any) {
@@ -15,9 +15,9 @@ export const register = async (req: Request, res: Response) => {
 
 }
 
-export const login = async (req: Request, res: Response): Promise<any> => {
+export const Login = async (req: Request, res: Response): Promise<any> => {
   const { email, password } = req.body;
-  const user = await loginFind(email, password);
+  const user = await login(email, password);
   if (!user) return res.status(400).json({ error: 'Invalid credentials' });
 
 
