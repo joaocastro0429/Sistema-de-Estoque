@@ -1,99 +1,173 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
+import { 
+  Form,
+  Input,
+  Button,
+  Card,
+  Typography,
+  Space,
+  message
+} from 'antd';
+import { 
+  MailOutlined, 
+  LockOutlined,
+  ArrowLeftOutlined
+} from '@ant-design/icons';
+
+const { Title } = Typography;
 
 const Register = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+  const [form] = Form.useForm();
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    // Validação de senhas
-    if (password !== confirmPassword) {
-      setError('As senhas não coincidem.');
+  const onFinish = async (values: { 
+    email: string; 
+    password: string; 
+    confirmPassword: string 
+  }) => {
+    if (values.password !== values.confirmPassword) {
+      message.error('As senhas não coincidem!');
       return;
     }
 
+    setLoading(true);
     try {
-      // Enviar as credenciais para o backend
-      const response = await axios.post('http://localhost:4444/register', { email, password });
+      await axios.post('http://localhost:4444/register', {
+        email: values.email,
+        password: values.password
+      });
 
-      // Caso o cadastro seja bem-sucedido
-      setSuccess('Usuário registrado com sucesso! Você pode fazer login agora.');
-
-      // Redirecionar para a tela de login
+      message.success('Registro realizado com sucesso! Redirecionando para login...');
+      
       setTimeout(() => {
         navigate('/');
       }, 2000);
-    } catch (error: any) {
-      setError('Erro ao registrar. Tente novamente.');
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        message.error(error.response?.data?.message || 'Erro ao registrar. Tente novamente.');
+      } else {
+        message.error('Erro inesperado. Tente novamente.');
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-96">
-        <h2 className="text-2xl font-semibold text-center mb-6">Registro</h2>
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
-            <input
-              type="email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="mt-1 p-2 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Digite seu email"
-              required
-            />
-          </div>
-
-          <div className="mb-4">
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700">Senha</label>
-            <input
-              type="password"
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="mt-1 p-2 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Digite sua senha"
-              required
-            />
-          </div>
-
-          <div className="mb-6">
-            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">Confirmar Senha</label>
-            <input
-              type="password"
-              id="confirmPassword"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              className="mt-1 p-2 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Confirme sua senha"
-              required
-            />
-          </div>
-
-          {error && <div className="mb-4 text-red-500 text-sm">{error}</div>}
-          {success && <div className="mb-4 text-green-500 text-sm">{success}</div>}
-
-          <button
-            type="submit"
-            className="w-full py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+    <div style={{
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      minHeight: '100vh',
+      backgroundColor: '#f0f2f5'
+    }}>
+      <Card
+        style={{
+          width: 400,
+          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
+        }}
+        bodyStyle={{ padding: '24px' }}
+      >
+        <Space direction="vertical" size="middle" style={{ width: '100%' }}>
+          <Title level={3} style={{ textAlign: 'center', marginBottom: 0 }}>
+            Criar Conta
+          </Title>
+          
+          <Form
+            form={form}
+            name="register_form"
+            onFinish={onFinish}
+            layout="vertical"
           >
-            Registrar
-          </button>
+            <Form.Item
+              name="email"
+              label="E-mail"
+              rules={[
+                { 
+                  required: true, 
+                  message: 'Por favor insira seu e-mail!' 
+                },
+                { 
+                  type: 'email',
+                  message: 'Por favor insira um e-mail válido!'
+                }
+              ]}
+            >
+              <Input 
+                prefix={<MailOutlined />} 
+                placeholder="seu@email.com" 
+              />
+            </Form.Item>
 
-          <div className="mt-4 text-center">
-            <Link to="/" className="text-blue-500 hover:text-blue-700">Já tem uma conta? Faça login</Link>
-          </div>
-        </form>
-      </div>
+            <Form.Item
+              name="password"
+              label="Senha"
+              rules={[
+                { 
+                  required: true, 
+                  message: 'Por favor insira sua senha!' 
+                },
+                { 
+                  min: 6,
+                  message: 'A senha deve ter no mínimo 6 caracteres!'
+                }
+              ]}
+            >
+              <Input.Password 
+                prefix={<LockOutlined />} 
+                placeholder="Digite sua senha" 
+              />
+            </Form.Item>
+
+            <Form.Item
+              name="confirmPassword"
+              label="Confirmar Senha"
+              dependencies={['password']}
+              rules={[
+                { 
+                  required: true, 
+                  message: 'Por favor confirme sua senha!' 
+                },
+                ({ getFieldValue }) => ({
+                  validator(_, value) {
+                    if (!value || getFieldValue('password') === value) {
+                      return Promise.resolve();
+                    }
+                    return Promise.reject(new Error('As senhas não coincidem!'));
+                  },
+                }),
+              ]}
+            >
+              <Input.Password 
+                prefix={<LockOutlined />} 
+                placeholder="Confirme sua senha" 
+              />
+            </Form.Item>
+
+            <Form.Item>
+              <Button 
+                type="primary" 
+                htmlType="submit" 
+                loading={loading}
+                block
+              >
+                Registrar
+              </Button>
+            </Form.Item>
+
+            <div style={{ textAlign: 'center' }}>
+              <Link to="/">
+                <Button type="link" icon={<ArrowLeftOutlined />}>
+                  Já tem uma conta? Faça login
+                </Button>
+              </Link>
+            </div>
+          </Form>
+        </Space>
+      </Card>
     </div>
   );
 };

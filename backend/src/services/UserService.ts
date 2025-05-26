@@ -13,8 +13,6 @@ export const loginUser = async (email: string, password: string) => {
 }
 
 
-
-
 export const loginFind = async (email: string, password: string) => {
   try {
     // Buscar o usuário pelo email

@@ -1,5 +1,5 @@
 import express from 'express'
-import { router } from './router/ProductRouter'
+import  router  from './router/TasktRouter'
 import { UserRouter } from './router/UserRouter'
 import cors from 'cors'
 
@@ -8,15 +8,10 @@ import cors from 'cors'
 const server=express()
 
 server.use(express.json())
-server.use(cors(
-    {
-      origin: 'http://localhost:5173',
-      credentials: true,
-    }
-  
-))
-
-server.use(router)
+server.use(cors())
 server.use(UserRouter)
+server.use(router)
+
+
 
 server.listen(4444)
