@@ -1,30 +1,45 @@
 import React, { useState } from 'react';
 
-const SimpleDashboard = () => {
+// Definindo o tipo do produto
+interface Product {
+  id: number;
+  name: string;
+  price: number;
+  quantity: number;
+}
+
+// Definindo o tipo do formulário
+interface ProductForm {
+  name: string;
+  price: string;
+  quantity: string;
+}
+
+export  const Dashboard: React.FC = () => {
   // Estado para lista de produtos
-  const [products, setProducts] = useState([
+  const [products, setProducts] = useState<Product[]>([
     { id: 1, name: 'Notebook Dell', price: 2500.99, quantity: 10 },
     { id: 2, name: 'Mouse Logitech', price: 299.90, quantity: 25 },
     { id: 3, name: 'Teclado Mecânico', price: 459.90, quantity: 8 }
   ]);
 
   // Estado para o formulário de novo produto
-  const [newProduct, setNewProduct] = useState({
+  const [newProduct, setNewProduct] = useState<ProductForm>({
     name: '',
     price: '',
     quantity: ''
   });
 
   // Estado para mostrar/esconder formulário
-  const [showForm, setShowForm] = useState(false);
+  const [showForm, setShowForm] = useState<boolean>(false);
 
   // Estado para edição
-  const [editingId, setEditingId] = useState(null);
+  const [editingId, setEditingId] = useState<number | null>(null);
 
   // Função para adicionar produto
-  const addProduct = () => {
+  const addProduct = (): void => {
     if (newProduct.name && newProduct.price && newProduct.quantity) {
-      const product = {
+      const product: Product = {
         id: Date.now(), // ID simples usando timestamp
         name: newProduct.name,
         price: parseFloat(newProduct.price),
@@ -38,12 +53,12 @@ const SimpleDashboard = () => {
   };
 
   // Função para deletar produto
-  const deleteProduct = (id) => {
+  const deleteProduct = (id: number): void => {
     setProducts(products.filter(product => product.id !== id));
   };
 
   // Função para iniciar edição
-  const startEdit = (product) => {
+  const startEdit = (product: Product): void => {
     setEditingId(product.id);
     setNewProduct({
       name: product.name,
@@ -53,7 +68,7 @@ const SimpleDashboard = () => {
   };
 
   // Função para salvar edição
-  const saveEdit = () => {
+  const saveEdit = (): void => {
     setProducts(products.map(product => 
       product.id === editingId 
         ? {
@@ -69,7 +84,7 @@ const SimpleDashboard = () => {
   };
 
   // Função para cancelar edição
-  const cancelEdit = () => {
+  const cancelEdit = (): void => {
     setEditingId(null);
     setNewProduct({ name: '', price: '', quantity: '' });
   };
@@ -196,7 +211,7 @@ const SimpleDashboard = () => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
-                  {products.map((product) => (
+                  {products.map((product: Product) => (
                     <tr key={product.id} className="hover:bg-gray-50">
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                         {product.name}
@@ -238,4 +253,3 @@ const SimpleDashboard = () => {
   );
 };
 
-export default SimpleDashboard;
