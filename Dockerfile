@@ -1,20 +1,15 @@
-# Use uma imagem base
 FROM node:18
 
-# Cria o diretório da aplicação dentro do container
 WORKDIR /app
 
-# Copia os arquivos de dependências
+# Copia package.json e package-lock.json (se existir)
 COPY package*.json ./
 
 # Instala as dependências
 RUN npm install
 
-# Copia todo o restante do projeto
+# Copia todo o restante do código da aplicação
 COPY . .
 
-# Expõe a porta que a aplicação irá rodar
-EXPOSE 3000
-
-# Comando para iniciar a aplicação
+# Comando para rodar a aplicação (exemplo)
 CMD ["npm", "start"]
