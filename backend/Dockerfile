@@ -1,16 +1,15 @@
-# Etapa de build
 FROM node:18
 
-# Diretório dentro do container
 WORKDIR /app
 
-# Copia os arquivos da subpasta backend
-COPY backend/package*.json ./
+# Copia package.json e package-lock.json (se existir)
+COPY package*.json ./
 
+# Instala as dependências
 RUN npm install
 
-COPY backend . 
+# Copia todo o restante do código da aplicação
+COPY . .
 
-EXPOSE 3000
-
+# Comando para rodar a aplicação (exemplo)
 CMD ["npm", "start"]

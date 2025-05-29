@@ -1,44 +1,17 @@
-version: '3.9'
+version: '3.8'
+
 services:
   db:
-    build: .
-    container_name: postgres_container
-    ports:
-      - "5432:5432"
+    image: postgres:15
+    container_name: postgres
     environment:
-      POSTGRES_USER: docker
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: sistema-estoque2
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: docker
+      POSTGRES_DB: root
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
 
 volumes:
-  db_data:
+  postgres-data:
