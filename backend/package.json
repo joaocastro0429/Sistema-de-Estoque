@@ -1,16 +1,17 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "main": "index.js",
+  "type": "commonjs",
+  "main": "dist/server.js",
   "engines": {
     "node": "20"
   },
   "scripts": {
     "dev": "tsx src/server.ts",
-    "build": "tsup src",
+    "build": "tsup src --out-dir dist",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate deploy",
-     "start": "npm run prisma:generate && npm run prisma:migrate && node dist/server.js"
+    "start": "npm run prisma:generate && npm run prisma:migrate && node dist/server.js"
   },
   "dependencies": {
     "@prisma/client": "^6.0.0",
