@@ -5,7 +5,7 @@ import { Login } from './pages/Login';
 import { Dashboard } from './pages/Dashbord'; // Vamos criar este componente a seguir
 import { Register } from './pages/Register';
 
-export const App = () => {
+ const App = () => {
   return (
     <Router>
       <Routes>
@@ -17,4 +17,6 @@ export const App = () => {
     </Router>
   );
 };
+
+export default App;
 
