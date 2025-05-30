@@ -8,13 +8,7 @@ import cors from 'cors'
 const server=express()
 
 server.use(express.json())
-server.use(cors(
-    {
-      origin: 'http://localhost:5173',
-      credentials: true,
-    }
-  
-))
+server.use(cors())
 
 server.use(router)
 server.use(UserRouter)

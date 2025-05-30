@@ -1,19 +1,18 @@
 import { Router } from "express";
 import { 
-    getProductsAll , 
-    createProducts ,
+    getProductsAll, 
+    createProducts,
     updateProducts,
-     deleteProducts
-    } from '../controllers/ProductsController'
-import { authMiddleware } from "src/middleware/auth";
+    deleteProducts
+} from '../controllers/ProductsController';
+import { authMiddleware } from "../middleware/auth";
 
 export const router = Router();
 
+router.get('/getProducts', getProductsAll);
 
-router.get('/getProducts', getProductsAll)
-router.post('/addProducts', createProducts)
-router.put('/updateProducts/:id' , updateProducts)
-router.delete('/deleteProducts/:id' , deleteProducts)
-
-
+// Rotas protegidas por autenticação
+router.post('/addProducts', authMiddleware, createProducts);
+router.put('/updateProducts/:id', authMiddleware, updateProducts);
+router.delete('/deleteProducts/:id', authMiddleware, deleteProducts);
 
