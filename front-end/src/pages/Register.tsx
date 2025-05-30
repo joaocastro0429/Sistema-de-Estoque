@@ -35,7 +35,7 @@ const Register = () => {
 
     try {
       // Enviar as credenciais para o backend
-      await axios.post('http://localhost:4444/register', { 
+      await axios.post('https://sistema-de-estoque-ar9k.onrender.com/register', { 
         email, 
         password 
       });

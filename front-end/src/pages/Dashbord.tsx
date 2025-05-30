@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 
+// Configuração da API
+const API_URL = 'https://sistema-de-estoque-ar9k.onrender.com';
+
 // Tipos
 interface Product {
   id: number;
@@ -82,11 +85,11 @@ export const Dashboard: React.FC = () => {
     setNewProduct({ name: '', price: '', quantity: '' });
   };
 
-  // Logout funcional com remoção de token e redirecionamento
+  // Logout funcional - removido localStorage para compatibilidade com Render
   const handleLogout = (): void => {
-    localStorage.removeItem('token'); // Simula remoção do token de autenticação
     alert('Você saiu do sistema!');
-    window.location.href = 'http://localhost:5173/';
+    // Redireciona para página de login ou home
+    window.location.href = '/login';
   };
 
   return (
@@ -122,6 +125,9 @@ export const Dashboard: React.FC = () => {
         <div className="bg-white rounded-lg shadow-md p-6 mb-6">
           <h2 className="text-lg font-semibold text-gray-800 mb-2">Resumo</h2>
           <p className="text-gray-600">Total de produtos: {products.length}</p>
+          <p className="text-sm text-gray-500 mt-2">
+            API: {API_URL}
+          </p>
         </div>
 
         {/* Formulário de adicionar/editar */}
@@ -243,4 +249,3 @@ export const Dashboard: React.FC = () => {
     </div>
   );
 };
-
