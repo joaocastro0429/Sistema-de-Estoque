@@ -1,5 +1,5 @@
-# Build Stage
-FROM node:20
+# Etapa de build
+FROM node:20 AS build
 
 WORKDIR /app
 
@@ -8,28 +8,20 @@ RUN npm install
 
 COPY . .
 
-# Prisma precisa ser gerado antes do build
-RUN npx prisma generate
-
-# Build do TypeScript
 RUN npm run build
 
-# Production Stage
-FROM node:18-slim
+
+# Etapa de produção
+FROM node:20 AS production
 
 WORKDIR /app
 
-# Instala dependências (copia node_modules já preparado)
+# Copia apenas os arquivos necessários da etapa de build
 COPY --from=build /app/package*.json ./
 COPY --from=build /app/node_modules ./node_modules
-
-# Copia a pasta dist (JS compilado) e a pasta do Prisma
 COPY --from=build /app/dist ./dist
 COPY --from=build /app/prisma ./prisma
-COPY --from=build /app/.env ./
 
-# Expondo porta
 EXPOSE 3000
 
-# Executa as migrations e inicia o servidor
-CMD ["sh", "-c", "npx prisma migrate deploy && node dist/server.js"]
+CMD ["node", "dist/main.js"]
