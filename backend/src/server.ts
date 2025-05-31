@@ -8,7 +8,12 @@ import cors from 'cors'
 const server=express()
 
 server.use(express.json())
-server.use(cors())
+server.use(cors(
+    {
+            origin:
+            'https://sistema-estoque-frontend.onrender.com'   
+    }
+))
 
 server.use(router)
 server.use(UserRouter)
