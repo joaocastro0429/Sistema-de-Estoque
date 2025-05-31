@@ -89,7 +89,7 @@ export const Dashboard: React.FC = () => {
   const handleLogout = (): void => {
     alert('Você saiu do sistema!');
     // Redireciona para página de login ou home
-    window.location.href = '/login';
+    window.location.href = '/';
   };
 
   return (
