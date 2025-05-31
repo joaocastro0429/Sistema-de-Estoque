@@ -11,7 +11,7 @@
     "build": "tsup src --out-dir dist",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate deploy",
-"start": "node dist/server.js"
+    "start": "npm run prisma:generate && npm run prisma:migrate && node dist/server.js"
   },
   "dependencies": {
     "@prisma/client": "^6.0.0",
