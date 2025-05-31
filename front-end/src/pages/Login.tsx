@@ -13,7 +13,7 @@ const Login = () => {
 
     try {
       // Enviar as credenciais para o backend e obter o token JWT
-      const response = await axios.post('https://sistema-de-estoque-ar9k.onrender.com/login', { email, password });
+      const response = await axios.post('https://sistema-de-estoque-hdib.onrender.com/login', { email, password });
 
       // Armazenar o token no localStorage
       localStorage.setItem('authToken', response.data.token);
