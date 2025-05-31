@@ -13,4 +13,4 @@ server.use(cors())
 server.use(router)
 server.use(UserRouter)
 
-server.listen(4444)
+server.listen(process.env.PORT_URL||4444)
